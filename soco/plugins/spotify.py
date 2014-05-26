@@ -86,7 +86,7 @@ class SpotifyTrack(object):
             track = self.data['spotify_uri']
             track = track.encode('utf-8')
             track = quote_plus(track)
-            return 'x-sonos-spotify:' + track
+            return 'x-sonos-spotify:' + track + '?sid=9'
         else:
             return ''
 
@@ -107,7 +107,7 @@ class SpotifyAlbum(object):
     @property
     def spotify_uri(self):
         """ The album's Spotify URI """
-        return self.data['spotify_uri']
+        return self.data['spotify_uri'] + '?sid=9'
 
     @spotify_uri.setter
     def spotify_uri(self, uri):
@@ -196,8 +196,9 @@ class Spotify(SoCoPlugin):
         track = SpotifyTrack(spotify_track.spotify_uri)
         params = {'uri': spotify_track.spotify_uri}
         res = requests.get(self.api_lookup_url, params=params)
+        print(res)
         data = res.json()
-
+        print(str(data))	
         if 'track' in data:
             track.title = data['track']['name']
             track.album_uri = data['track']['album']['href']
@@ -209,6 +210,7 @@ class Spotify(SoCoPlugin):
         album = SpotifyAlbum(spotify_album.spotify_uri)
         params = {'uri': spotify_album.spotify_uri}
         res = requests.get(self.api_lookup_url, params=params)
+        print(res)
         data = res.json()
 
         if 'album' in data:
@@ -217,12 +219,12 @@ class Spotify(SoCoPlugin):
 
         return album
 
-    def add_track_to_queue(self, spotify_track):
+    def add_track_to_queue(self, spotify_track, index=0):
         """ Add a spotify track to the queue using the SpotifyTrack class"""
         if not spotify_track.satisfied():
             spotify_track = self._add_track_metadata(spotify_track)
 
-        return self.soco.add_to_queue(spotify_track)
+        return self.soco.add_to_queue(spotify_track, index)
 
     def add_album_to_queue(self, spotify_album):
         """ Add a spotify album to the queue using the SpotifyAlbum class """
