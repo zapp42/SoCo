@@ -196,9 +196,7 @@ class Spotify(SoCoPlugin):
         track = SpotifyTrack(spotify_track.spotify_uri)
         params = {'uri': spotify_track.spotify_uri}
         res = requests.get(self.api_lookup_url, params=params)
-        print(res)
         data = res.json()
-        print(str(data))	
         if 'track' in data:
             track.title = data['track']['name']
             track.album_uri = data['track']['album']['href']
@@ -210,7 +208,6 @@ class Spotify(SoCoPlugin):
         album = SpotifyAlbum(spotify_album.spotify_uri)
         params = {'uri': spotify_album.spotify_uri}
         res = requests.get(self.api_lookup_url, params=params)
-        print(res)
         data = res.json()
 
         if 'album' in data:
@@ -224,7 +221,7 @@ class Spotify(SoCoPlugin):
         if not spotify_track.satisfied():
             spotify_track = self._add_track_metadata(spotify_track)
 
-        return self.soco.add_to_queue(spotify_track, index)
+        return self.soco.add_to_queue(spotify_track)
 
     def add_album_to_queue(self, spotify_album):
         """ Add a spotify album to the queue using the SpotifyAlbum class """
