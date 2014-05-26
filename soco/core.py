@@ -900,7 +900,7 @@ class SoCo(_SocoSingletonBase):
                 track['title'] = trackinfo[index + 3:]
             else:
                 LOGGER.warning('Could not handle track info: "%s"', trackinfo)
-                LOGGER.warning(traceback.format_exc())
+                #LOGGER.warning(traceback.format_exc())
                 track['title'] = trackinfo
 
         # If the speaker is playing from the line-in source, querying for track
